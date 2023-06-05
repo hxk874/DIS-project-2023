@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html> 
-<head> 
-    <title>Uploading & Reading CSV file</title> 
-</head> 
-<body> 
+{% extends "base.html" %} {% block title %} Uploading & Reading CSV file {% endblock %} {% block content %}
+
+
     <form method = "POST" enctype="multipart/form-data" action = "/">   
         <input type="file" name="file" accept=".csv">
         <input type = "submit" value="Upload"> 
@@ -12,5 +9,5 @@
   <form action="/show_data" target="_blank">
         <input type="submit" value="Show CSV"/>
     </form>
-</body> 
-</html>
+
+    {% endblock %}
