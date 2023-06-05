@@ -14,11 +14,12 @@ views = Blueprint('views', __name__)
 
 
 placement = 'website/'+str(UPLOAD_FOLDER)
+cols = ['UNIQUE_ID','TECTONIC SETTING', 'LOCATION', 'ROCK NAME','MATERIAL','ROCK TYPE', 'SIO2(WT%)', 'AL2O3(WT%)', 'CAO(WT%)', 'NA2O(WT%)', 'K2O(WT%)', 'FEO(WT%)', 'FE2O3(WT%)', 'FEOT(WT%)', 'MGO(WT%)', 'MNO(WT%)', 'P2O5(WT%)', 'LOI(WT%)']
 
 @views.route('/', methods=['GET', 'POST'])
 def uploadFile():
 	if request.method == 'POST':
-	# upload file flask
+	    # upload file flask
 		f = request.files.get('file')
 
 		# Extracting uploaded file name
@@ -29,9 +30,14 @@ def uploadFile():
 		session['uploaded_data_file_path'] = os.path.join(placement, data_filename)
 
 		data_file_path = session.get('uploaded_data_file_path', None)
-		data = pd.read_csv(data_file_path, encoding='unicode_escape')
 
-		return render_template('index2.html')
+		data = pd.read_csv(data_file_path, usecols=cols, encoding='unicode_escape')
+        #data.dropna(subset='UNIQUE_ID',axis=0, inplace=True)
+        #os.remove(os.path.join(placement, data_filename))
+        # use columns location hovedelementer rocktype tectonic setting. add column Project number, user ID
+        # add as Sample model to database 
+        # delete file from uploads (os.remove(os.path.join(placement, data_filename)) )
+        #return render_template('index2.html')
 	return render_template("index.html")
 
 
