@@ -1,7 +1,7 @@
-from . import db
-from sqlalchemy.sql import func
 
-class Sample(db.Model):
+#from sqlalchemy.sql import func
+
+"""class Sample(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     unique_id = db.Column(db.Integer)
     tectonic_set = db.Column(db.String(1000))
@@ -20,4 +20,4 @@ class Sample(db.Model):
     mgO = db.Column(db.Float)
     mnO = db.Column(db.Float)
     p2O5 = db.Column(db.Float)
-    loss = db.Column(db.Float)
+    loss = db.Column(db.Float)"""
