@@ -52,18 +52,18 @@ def parseCSV(filePath):
     						rock_name = row['ROCK NAME'],
 							material = row['MATERIAL'],
 							rock_type = row['ROCK TYPE'],
-							siO2 = row['SIO2(WT%)'])
-							#al2o3 = (i,row['AL2O3(WT%)']),
-							#caO = (i,row['CAO(WT%)']),
-							#na2O = (i,row['NA2O(WT%)']),
-							#k2O = (i,row['K2O(WT%)']),
-							#feO = (i,row['FEO(WT%)']),
-							#fe2O3 = (i,row['FE2O3(WT%)']),
-							#feO_total = (i,row['FEOT(WT%)']),
-							#mgO = (i,row['MGO(WT%)']),
-							#mnO = (i,row['MNO(WT%)']),
-							#p2O5 = (i,row['P2O5(WT%)']),
-							#loss = (i,row['LOI(WT%)']))
+							siO2 = row['SIO2(WT%)'],
+							al2o3 = row['AL2O3(WT%)'],
+							caO = row['CAO(WT%)'],
+							na2O = row['NA2O(WT%)'],
+							k2O = row['K2O(WT%)'],
+							feO = row['FEO(WT%)'],
+							fe2O3 = row['FE2O3(WT%)'],
+							feO_total = row['FEOT(WT%)'],
+							mgO = row['MGO(WT%)'],
+							mnO = row['MNO(WT%)'],
+							p2O5 = row['P2O5(WT%)'],
+							loss = row['LOI(WT%)'])
 		db.session.add(new_sample)
 		db.session.commit()
 	return render_template("index.html")
