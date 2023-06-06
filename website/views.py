@@ -1,7 +1,5 @@
 from flask import Blueprint, render_template, request, flash, jsonify
 from . import app, UPLOAD_FOLDER, conn, cur
-#from .models import Sample
-import json
 from distutils.log import debug
 from fileinput import filename
 import pandas as pd
@@ -16,7 +14,6 @@ views = Blueprint('views', __name__)
 
 
 placement = 'website/'+str(UPLOAD_FOLDER)
-#cols = ['UNIQUE_ID','TECTONIC SETTING', 'LOCATION', 'ROCK NAME','MATERIAL','ROCK TYPE', 'SIO2(WT%)', 'AL2O3(WT%)', 'CAO(WT%)', 'NA2O(WT%)', 'K2O(WT%)', 'FEO(WT%)', 'FE2O3(WT%)', 'FEOT(WT%)', 'MGO(WT%)', 'MNO(WT%)', 'P2O5(WT%)', 'LOI(WT%)']
 cols = ['UNIQUE_ID','TECTONIC SETTING', 'LOCATION', 'ROCK NAME','MATERIAL','ROCK TYPE', 'SIO2(WT%)', 'AL2O3(WT%)', 'CAO(WT%)', 'NA2O(WT%)', 'K2O(WT%)', 'FEO(WT%)', 'FE2O3(WT%)', 'FEOT(WT%)', 'MGO(WT%)', 'MNO(WT%)', 'P2O5(WT%)', 'LOI(WT%)']
 
 @views.route('/', methods=['GET', 'POST'])
@@ -31,6 +28,8 @@ def uploadFile():
 		f.save(os.path.join(placement, data_filename))
 		tablename = 'sample'
 		session['uploaded_data_file_path'] = os.path.join(placement, data_filename)
+		droptable = 'DROP TABLE IF EXISTS '
+		cur.execute(droptable+tablename)
 		cur.execute(f"CREATE TABLE {tablename} (id SERIAL PRIMARY KEY, unique_id INT, tectonic_set VARCHAR(150), location VARCHAR(1000), rock_name VARCHAR(150), material VARCHAR(150), rock_type VARCHAR(150), siO2 FLOAT, al2o3 FLOAT, caO FLOAT, na2O FLOAT, k2O FLOAT, feO FLOAT, fe2O3 FLOAT, feO_total FLOAT, mgO FLOAT, mnO FLOAT, p2O5 FLOAT, loss FLOAT);")
 		parseCSV(session['uploaded_data_file_path'],tablename)
 		os.remove(os.path.join(placement, data_filename)) # remove csv file from uploads folder 
@@ -40,17 +39,14 @@ def uploadFile():
 
 
 def parseCSV(filePath, tablename):
-	# CVS Column Names
-	
 	# Use Pandas to parse the CSV file
 	csvData = pd.read_csv(filePath, usecols=cols, encoding='unicode_escape')
 	csvData.dropna(subset='UNIQUE_ID',axis=0, inplace=True)
     # Loop through the Rows
-	
 	for index, row in csvData.iterrows():
-		sql = "INSERT INTO sample (unique_id, tectonic_set, location, rock_name, material, rock_type, siO2, al2o3, caO, na2O, k2O, feO, fe2O3, feO_total, mgO, mnO, p2O5, loss) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+		
+		sql = "INSERT INTO (unique_id, tectonic_set, location, rock_name, material, rock_type, siO2, al2o3, caO, na2O, k2O, feO, fe2O3, feO_total, mgO, mnO, p2O5, loss) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 		values = (
-				#tablename,
 				row['UNIQUE_ID'], 
 				row['TECTONIC SETTING'], 
 				row['LOCATION'],
@@ -70,7 +66,7 @@ def parseCSV(filePath, tablename):
 				row['P2O5(WT%)'],
 				row['LOI(WT%)']
 				)
-		cur.execute(sql, values)
+		cur.execute(sql[:12]+tablename+sql[11:], values)
 		conn.commit()
 	return render_template("index.html")
 
