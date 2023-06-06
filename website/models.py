@@ -3,21 +3,21 @@ from sqlalchemy.sql import func
 
 class Sample(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    unique_id = 'UNIQUE_ID'
-    tectonic_set = 'TECTONIC SETTING'
-    location = 'LOCATION'
-    rock_name =  'ROCK NAME'
-    material = 'MATERIAL'
-    rock_type = 'ROCK TYPE'
-    siO2 = 'SIO2(WT%)'
-    al2o3 = 'AL2O3(WT%)'
-    caO =  'CAO(WT%)'
-    na2O3 = 'NA2O(WT%)'
-    k2O = 'K2O(WT%)'
-    feO = 'FEO(WT%)'
-    fe2O3 = 'FE2O3(WT%)'
-    feO_total = 'FEOT(WT%)'
-    mgO = 'MGO(WT%)'
-    mnO = 'MNO(WT%)'
-    p2O5 = 'P2O5(WT%)'
-    loss = 'LOI(WT%)'
+    unique_id = db.Column(db.Integer)
+    tectonic_set = db.Column(db.String(1000))
+    location = db.Column(db.String(1000))
+    rock_name =  db.Column(db.String(1000))
+    material = db.Column(db.String(1000))
+    rock_type = db.Column(db.String(1000))
+    siO2 = db.Column(db.Float)
+    #al2o3 = db.Column(db.Float)
+    #caO =  db.Column(db.Float)
+    #na2O = db.Column(db.Float)
+    #k2O = db.Column(db.Float)
+    #feO = db.Column(db.Float)
+    #fe2O3 = db.Column(db.Float)
+    #feO_total = db.Column(db.Float)
+    #mgO = db.Column(db.Float)
+    #mnO = db.Column(db.Float)
+    #p2O5 = db.Column(db.Float)
+    #loss = db.Column(db.Float)

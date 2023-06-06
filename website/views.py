@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, flash, jsonify
 from . import db, app, UPLOAD_FOLDER
+from .models import Sample
 import json
 from distutils.log import debug
 from fileinput import filename
@@ -10,13 +11,70 @@ from os import path
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 
+
 views = Blueprint('views', __name__)
 
 
 placement = 'website/'+str(UPLOAD_FOLDER)
 cols = ['UNIQUE_ID','TECTONIC SETTING', 'LOCATION', 'ROCK NAME','MATERIAL','ROCK TYPE', 'SIO2(WT%)', 'AL2O3(WT%)', 'CAO(WT%)', 'NA2O(WT%)', 'K2O(WT%)', 'FEO(WT%)', 'FE2O3(WT%)', 'FEOT(WT%)', 'MGO(WT%)', 'MNO(WT%)', 'P2O5(WT%)', 'LOI(WT%)']
 
+
 @views.route('/', methods=['GET', 'POST'])
+def uploadFile():
+	if request.method == 'POST':
+		# upload file flask
+		f = request.files.get('file')
+ 
+ 		# Extracting uploaded file name
+		data_filename = secure_filename(f.filename)
+		
+		f.save(os.path.join(placement, data_filename))
+		
+		session['uploaded_data_file_path'] = os.path.join(placement, data_filename)
+		parseCSV(session['uploaded_data_file_path'])
+
+
+		return render_template('index2.html')
+	return render_template("index.html")
+
+
+def parseCSV(filePath):
+	# CVS Column Names
+	cols = ['UNIQUE_ID','TECTONIC SETTING', 'LOCATION', 'ROCK NAME','MATERIAL','ROCK TYPE', 'SIO2(WT%)', 'AL2O3(WT%)', 'CAO(WT%)', 'NA2O(WT%)', 'K2O(WT%)', 'FEO(WT%)', 'FE2O3(WT%)', 'FEOT(WT%)', 'MGO(WT%)', 'MNO(WT%)', 'P2O5(WT%)', 'LOI(WT%)']
+	# Use Pandas to parse the CSV file
+	csvData = pd.read_csv(filePath, usecols=cols, encoding='unicode_escape')
+	csvData.dropna(subset='UNIQUE_ID',axis=0, inplace=True)
+    # Loop through the Rows
+	for index, row in csvData.iterrows():
+		new_sample = Sample(unique_id = row['UNIQUE_ID'], 
+							tectonic_set = row['TECTONIC SETTING'],
+    						location = row['LOCATION'],
+    						rock_name = row['ROCK NAME'],
+							material = row['MATERIAL'],
+							rock_type = row['ROCK TYPE'],
+							siO2 = row['SIO2(WT%)'])
+							#al2o3 = (i,row['AL2O3(WT%)']),
+							#caO = (i,row['CAO(WT%)']),
+							#na2O = (i,row['NA2O(WT%)']),
+							#k2O = (i,row['K2O(WT%)']),
+							#feO = (i,row['FEO(WT%)']),
+							#fe2O3 = (i,row['FE2O3(WT%)']),
+							#feO_total = (i,row['FEOT(WT%)']),
+							#mgO = (i,row['MGO(WT%)']),
+							#mnO = (i,row['MNO(WT%)']),
+							#p2O5 = (i,row['P2O5(WT%)']),
+							#loss = (i,row['LOI(WT%)']))
+		db.session.add(new_sample)
+		db.session.commit()
+	return render_template("index.html")
+
+
+           
+
+
+
+
+"""@views.route('/', methods=['GET', 'POST'])
 def uploadFile():
 	if request.method == 'POST':
 	    # upload file flask
@@ -29,16 +87,16 @@ def uploadFile():
 
 		session['uploaded_data_file_path'] = os.path.join(placement, data_filename)
 
-		data_file_path = session.get('uploaded_data_file_path', None)
+		#data_file_path = session.get('uploaded_data_file_path', None)
 
-		data = pd.read_csv(data_file_path, usecols=cols, encoding='unicode_escape')
+		#data = pd.read_csv(data_file_path, usecols=cols, encoding='unicode_escape')
         #data.dropna(subset='UNIQUE_ID',axis=0, inplace=True)
         #os.remove(os.path.join(placement, data_filename))
         # use columns location hovedelementer rocktype tectonic setting. add column Project number, user ID
         # add as Sample model to database 
         # delete file from uploads (os.remove(os.path.join(placement, data_filename)) )
-        #return render_template('index2.html')
-	return render_template("index.html")
+        return render_template('index2.html')
+	return render_template("index.html")"""
 
 
 @views.route('/show_data')

@@ -24,11 +24,16 @@ def create_app():
 	# Configure upload file path flask
 	app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 	app.secret_key = 'This is your secret key to utilize session in Flask'
-	app.config['SQLALCHEMY_DATABSE_URI'] = f'sqlite:///{DB_NAME}'
-	
+	app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+	db.init_app(app)
+
 	from .views import views
+	from .models import Sample
 
 	app.register_blueprint(views, url_prefix='/')
+
+	with app.app_context():
+		db.create_all()
 
 	return app
 
