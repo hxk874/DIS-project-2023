@@ -26,12 +26,12 @@ def uploadFile():
 	if request.method == 'POST':
 		# upload file flask
 		f = request.files.get('file')
- 
+		tablename = request.form.get('tableName')
  		# Extracting uploaded file name
 		data_filename = secure_filename(f.filename)
 		
 		f.save(os.path.join(placement, data_filename))
-		tablename = 'sample'
+		
 		session['uploaded_data_file_path'] = os.path.join(placement, data_filename)
 		droptable = 'DROP TABLE IF EXISTS '
 		cur.execute(droptable+tablename)
@@ -41,7 +41,7 @@ def uploadFile():
 		os.remove(os.path.join(placement, data_filename)) # remove csv file from uploads folder 
 
 		return render_template('index2.html')
-	return render_template("upload.html")
+	return render_template('index2.html')
 
 
 def parseCSV(filePath, tablename):
@@ -75,7 +75,7 @@ def parseCSV(filePath, tablename):
 				)
 		cur.execute(sql[:12]+tablename+sql[11:], values)
 		conn.commit()
-	return ("Record inserted successfully into sample table")
+	return jsonify({})
 
 
 @views.route('/show_data')
