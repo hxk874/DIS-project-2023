@@ -16,7 +16,7 @@ views = Blueprint('views', __name__)
 placement = 'website/'+str(UPLOAD_FOLDER)
 cols = ['UNIQUE_ID','TECTONIC SETTING', 'LOCATION', 'ROCK NAME','MATERIAL','ROCK TYPE', 'SIO2(WT%)', 'AL2O3(WT%)', 'CAO(WT%)', 'NA2O(WT%)', 'K2O(WT%)', 'FEO(WT%)', 'FE2O3(WT%)', 'FEOT(WT%)', 'MGO(WT%)', 'MNO(WT%)', 'P2O5(WT%)', 'LOI(WT%)']
 
-@views.route("/info", methods=['GET'])
+@views.route("/", methods=['GET'])
 def info():
 	return render_template("info.html")
 
@@ -113,5 +113,8 @@ def showData():
 
 @views.route("/query", methods=['GET'])
 def query():
+	cur.execute('SELECT table_name FROM information_schema.tables WHERE table_schema = \'public\';')
+	conn.commit()
+	tablelist = cur.fetchall()
 	
-	return render_template("query.html")
+	return render_template("query.html", tablelist=tablelist)

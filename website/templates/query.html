@@ -2,14 +2,14 @@
 <br />
 <h1 align="center">Inspect a table</h1>
     <br/>
-    <h3> Choose the table you want to inspect. </h3>
-    <form method = "POST" enctype="multipart/form-data" action = "/"> 
-        <input
-          type="text"
-          class="form-control"
-          id="tableName"
-          name="tableName"
-          placeholder="Enter table name" />
+    <p> Choose the table you want to inspect. </p>
+    <p style="font-family:verdana">
+      <SELECT name="tablename" style="font-family:verdana">
+      {% for t in tablelist %}
+        <OPTION value={{t[0]}}>{{t[0]}}</OPTION>
+      {% endfor %}
+      </SELECT>
+      </p>
     <br/>
       <div class="form-group">
         <label for="chemElm1"> Compute maximum samplevalue of a chemical element. </label>
@@ -29,18 +29,6 @@
           name="chemElm2"
           placeholder="Enter a chemical element" />
       </div>
-
-      <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Dropdown button
-        </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">Action</a></li>
-          <li><a class="dropdown-item" href="#">Another action</a></li>
-          <li><a class="dropdown-item" href="#">Something else here</a></li>
-        </ul>
-      </div>
-
       <br />
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>

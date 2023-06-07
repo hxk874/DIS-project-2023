@@ -66,9 +66,15 @@ if cur.fetchone():
 	print('yay')"""
 
 create = "CREATE TABLE (id SERIAL PRIMARY KEY, unique_id INT, tectonic_set VARCHAR(150), location VARCHAR(1000), rock_name VARCHAR(150), material VARCHAR(150), rock_type VARCHAR(150), siO2 FLOAT, al2o3 FLOAT, caO FLOAT, na2O FLOAT, k2O FLOAT, feO FLOAT, fe2O3 FLOAT, feO_total FLOAT, mgO FLOAT, mnO FLOAT, p2O5 FLOAT, loss FLOAT);"
-print(create[:13]+'hej'+create[12:])
+#print(create[:13]+'hej'+create[12:])
 
 #create = "CREATE TABLE (id SERIAL PRIMARY KEY, unique_id INT, tectonic_set VARCHAR(150), location VARCHAR(1000), rock_name VARCHAR(150), material VARCHAR(150), rock_type VARCHAR(150), siO2 FLOAT, al2o3 FLOAT, caO FLOAT, na2O FLOAT, k2O FLOAT, feO FLOAT, fe2O3 FLOAT, feO_total FLOAT, mgO FLOAT, mnO FLOAT, p2O5 FLOAT, loss FLOAT);"
 			
-cur.execute(create[:13]+'TEST2'+create[12:])
+#cur.execute(create[:13]+'TEST2'+create[12:])
+#conn.commit()
+
+
+# get the table names
+q2 = cur.execute('SELECT table_name FROM information_schema.tables WHERE table_schema = \'public\';')
 conn.commit()
+print(cur.fetchall())
