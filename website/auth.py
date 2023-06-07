@@ -1,8 +1,19 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
+import psycopg2
+from . import app, UPLOAD_FOLDER, conn, cur
+from distutils.log import debug
+from fileinput import filename
+import pandas as pd
+import os
+from os import path
+from werkzeug.utils import secure_filename
+from flask_sqlalchemy import SQLAlchemy
+
 
 auth = Blueprint('auth', __name__)
+
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -10,12 +21,12 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        user = User.query.filter_by(email=email).first() # if the email exists, it will return the first user with that email
+        user = cur.execute("SELECT * FROM users WHERE email = %s", email)
 
         if user:
             if check_password_hash(user.password, password):
                 flash('Logged in successfully!', category='success')
-                login_user(user, remember=True) # remember=True means that the user will be remembered even if the browser is closed. Stores the flask server
+                login_user(user, remember=True)
                 return redirect(url_for('views.info'))
             else:
                 flash('Incorrect password, try again.', category='error')
@@ -32,16 +43,17 @@ def logout():
     return redirect(url_for('auth.login'))
 
 
-@auth.route('/signup', methods=['GET', 'POST'])
+@auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
     if request.method == 'POST':
         email = request.form.get('email')
         first_name = request.form.get('firstName')
+        last_name = request.form.get('lastName')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
-
-        user = User.query.filter_by(email=email).first()
-
+        
+        user = cur.execute("SELECT * FROM users WHERE email = %s", email)
+        
         if user:
             flash('Email already exists.', category='error')
         elif len(email) < 4:
@@ -53,11 +65,9 @@ def sign_up():
         elif len(password1) < 7:
             flash('Password must be at least 7 characters.', category='error')
         else:
-            new_user = User(email=email, first_name=first_name, password=generate_password_hash(password1, method='sha256')) # all the data from models.py
-            db.session.add(new_user)
-            db.session.commit()
-            login_user(new_user, remember=True)
+            cur.execute("INSERT INTO users (email, first_name, last_name, password) VALUES (%s, %s, %s)", email, first_name, last_name, generate_password_hash(password1, method='sha256'))
+            conn.commit()
             flash('Account created!', category='success')
-            return redirect(url_for('views.home'))
+            return redirect(url_for('views.info'))
 
     return render_template("sign_up.html", user=current_user)
