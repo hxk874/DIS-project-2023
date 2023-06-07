@@ -9,11 +9,12 @@ import os
 from os import path
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
+import psycopg2
 
 #with open('/Users/tove/Downloads/2023-06-KAIVCT_ANTARCTICA.csv') as f:
 #    print(f)
 
-cols = ['UNIQUE_ID','TECTONIC SETTING', 'LOCATION', 'ROCK NAME','MATERIAL','ROCK TYPE', 'SIO2(WT%)', 'AL2O3(WT%)', 'CAO(WT%)', 'NA2O(WT%)', 'K2O(WT%)', 'FEO(WT%)', 'FE2O3(WT%)', 'FEOT(WT%)', 'MGO(WT%)', 'MNO(WT%)', 'P2O5(WT%)', 'LOI(WT%)']
+"""cols = ['UNIQUE_ID','TECTONIC SETTING', 'LOCATION', 'ROCK NAME','MATERIAL','ROCK TYPE', 'SIO2(WT%)', 'AL2O3(WT%)', 'CAO(WT%)', 'NA2O(WT%)', 'K2O(WT%)', 'FEO(WT%)', 'FE2O3(WT%)', 'FEOT(WT%)', 'MGO(WT%)', 'MNO(WT%)', 'P2O5(WT%)', 'LOI(WT%)']
 
 
 data = pd.read_csv('/Users/tove/Downloads/2023-06-KAIVCT_ANTARCTICA.csv',usecols=cols,encoding='unicode_escape')
@@ -22,7 +23,7 @@ data.dropna(subset='UNIQUE_ID',axis=0, inplace=True)
 #print(data)
 
 for index,row in data.iterrows():
-    print (data['LOCATION'][row])
+    print (data['LOCATION'][row])"""
 
 
 
@@ -47,7 +48,27 @@ for index,row in data.iterrows():
 
 
 
-<div id="London" class="tabcontent">
-      <h3>London</h3>
-      <p>London is the capital city of England.</p>
-    </div>
+
+
+conn = psycopg2.connect(host="localhost", user="postgres", dbname="dis2023", password="wildeisfine",port="5432")
+cur = conn.cursor()
+
+"""try: 
+	q1 = cur.execute('SELECT sio2 FROM iceland;')
+	if cur.fetchall():
+		print('YAY')
+except: print('NO')"""
+
+"""check = 'SELECT * FROM ;'
+print(check[:14]+'iceland'+check[14:])
+cur.execute(check[:14]+'iceland'+check[14:])
+if cur.fetchone():
+	print('yay')"""
+
+create = "CREATE TABLE (id SERIAL PRIMARY KEY, unique_id INT, tectonic_set VARCHAR(150), location VARCHAR(1000), rock_name VARCHAR(150), material VARCHAR(150), rock_type VARCHAR(150), siO2 FLOAT, al2o3 FLOAT, caO FLOAT, na2O FLOAT, k2O FLOAT, feO FLOAT, fe2O3 FLOAT, feO_total FLOAT, mgO FLOAT, mnO FLOAT, p2O5 FLOAT, loss FLOAT);"
+print(create[:13]+'hej'+create[12:])
+
+#create = "CREATE TABLE (id SERIAL PRIMARY KEY, unique_id INT, tectonic_set VARCHAR(150), location VARCHAR(1000), rock_name VARCHAR(150), material VARCHAR(150), rock_type VARCHAR(150), siO2 FLOAT, al2o3 FLOAT, caO FLOAT, na2O FLOAT, k2O FLOAT, feO FLOAT, fe2O3 FLOAT, feO_total FLOAT, mgO FLOAT, mnO FLOAT, p2O5 FLOAT, loss FLOAT);"
+			
+cur.execute(create[:13]+'TEST2'+create[12:])
+conn.commit()
