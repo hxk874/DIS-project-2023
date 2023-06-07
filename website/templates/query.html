@@ -1,0 +1,37 @@
+{% extends "base.html" %} {% block title %}Query{% endblock %} {% block content %}
+<br />
+<h1 align="center">Inspect a table</h1>
+    <br/>
+    <h3> Choose the table you want to inspect. </h3>
+    <form method = "POST" enctype="multipart/form-data" action = "/"> 
+        <input
+          type="text"
+          class="form-control"
+          id="tableName"
+          name="tableName"
+          placeholder="Enter table name" />
+    <br/>
+      <div class="form-group">
+        <label for="chemElm1"> Compute maximum samplevalue of a chemical element. </label>
+        <input
+          type="text"
+          class="form-control"
+          id="chemElm1"
+          name="chemElm1"
+          placeholder="Enter a chemical element" />
+      </div>
+      <div class="form-group">
+        <label for="chemElm2"> Compute minimum samplevalue of a chemical element.</label>
+        <input
+          type="text"
+          class="form-control"
+          id="chemElm2"
+          name="chemElm2"
+          placeholder="Enter a chemical element" />
+      </div>
+
+      <br />
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    {% endblock %}
