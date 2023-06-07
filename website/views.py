@@ -24,24 +24,41 @@ def info():
 @views.route('/upload', methods=['GET', 'POST'])
 def uploadFile():
 	if request.method == 'POST':
-		# upload file flask
-		f = request.files.get('file')
-		tablename = request.form.get('tableName')
- 		# Extracting uploaded file name
-		data_filename = secure_filename(f.filename)
 		
-		f.save(os.path.join(placement, data_filename))
 		
-		session['uploaded_data_file_path'] = os.path.join(placement, data_filename)
-		droptable = 'DROP TABLE IF EXISTS '
-		cur.execute(droptable+tablename)
-		cur.execute(f"CREATE TABLE {tablename} (id SERIAL PRIMARY KEY, unique_id INT, tectonic_set VARCHAR(150), location VARCHAR(1000), rock_name VARCHAR(150), material VARCHAR(150), rock_type VARCHAR(150), siO2 FLOAT, al2o3 FLOAT, caO FLOAT, na2O FLOAT, k2O FLOAT, feO FLOAT, fe2O3 FLOAT, feO_total FLOAT, mgO FLOAT, mnO FLOAT, p2O5 FLOAT, loss FLOAT);")
-		parseCSV(session['uploaded_data_file_path'],tablename)
+		tablename = str(request.form.get('tableName'))
+		try: # check if table already exists
+			check = "SELECT * FROM ;"
+			cur.execute(check[:14]+tablename+check[14:])
+			conn.commit()
+			if cur.fetchone():
+				flash('tablename already exists!', category='error')
+		except: 
+			cur.execute("ROLLBACK")
+			conn.commit()
+			tablename = request.form.get('tableName')
+			# upload file flask
+			f = request.files.get('file')
+			# Extracting uploaded file name
+			data_filename = secure_filename(f.filename)
+			
+			f.save(os.path.join(placement, data_filename))
+			
+			session['uploaded_data_file_path'] = os.path.join(placement, data_filename)
+			#droptable = 'DROP TABLE IF EXISTS '
+			#cur.execute(droptable+tablename)
+			create = "CREATE TABLE (id SERIAL PRIMARY KEY, unique_id INT, tectonic_set VARCHAR(150), location VARCHAR(1000), rock_name VARCHAR(150), material VARCHAR(150), rock_type VARCHAR(150), siO2 FLOAT, al2o3 FLOAT, caO FLOAT, na2O FLOAT, k2O FLOAT, feO FLOAT, fe2O3 FLOAT, feO_total FLOAT, mgO FLOAT, mnO FLOAT, p2O5 FLOAT, loss FLOAT);"
+			
+			cur.execute(create[:13]+tablename+create[12:])
+			conn.commit()
+			#cur.execute(f"CREATE TABLE {tablename} (id SERIAL PRIMARY KEY, unique_id INT, tectonic_set VARCHAR(150), location VARCHAR(1000), rock_name VARCHAR(150), material VARCHAR(150), rock_type VARCHAR(150), siO2 FLOAT, al2o3 FLOAT, caO FLOAT, na2O FLOAT, k2O FLOAT, feO FLOAT, fe2O3 FLOAT, feO_total FLOAT, mgO FLOAT, mnO FLOAT, p2O5 FLOAT, loss FLOAT);")
+			parseCSV(session['uploaded_data_file_path'],tablename)
 
-		os.remove(os.path.join(placement, data_filename)) # remove csv file from uploads folder 
+			os.remove(os.path.join(placement, data_filename)) # remove csv file from uploads folder 
+			flash('Data successfully uploaded!', category='success')
+			return render_template('upload.html')
 
-		return render_template('index2.html')
-	return render_template('index2.html')
+	return render_template('upload.html')
 
 
 def parseCSV(filePath, tablename):
@@ -52,7 +69,7 @@ def parseCSV(filePath, tablename):
     # Loop through the Rows
 	for index, row in csvData.iterrows():
 		
-		sql = "INSERT INTO (unique_id, tectonic_set, location, rock_name, material, rock_type, siO2, al2o3, caO, na2O, k2O, feO, fe2O3, feO_total, mgO, mnO, p2O5, loss) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+		sql = "INSERT INTO (unique_id, tectonic_set, location, rock_name, material, rock_type, siO2, al2o3, caO, na2O, k2O, feO, fe2O3, feO_total, mgO, mnO, p2O5, loss) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
 		values = (
 				row['UNIQUE_ID'], 
 				row['TECTONIC SETTING'], 
