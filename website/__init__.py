@@ -20,7 +20,7 @@ ALLOWED_EXTENSIONS = {'csv'}
 
 # database url: jdbc:postgresql://localhost:5432/postgres
 
-conn = psycopg2.connect(host="localhost", user="postgres", dbname="dis2023", password="wildeisfine",port="5432")
+conn = psycopg2.connect(host="localhost", user="postgres", dbname="postgres", password="nh3M9",port="5432")
 cur = conn.cursor()
 
 def create_app():
@@ -33,25 +33,8 @@ def create_app():
 	#db.init_app(app)
 
 	from .views import views
-	#from .models import Sample
+	#from .auth import auth
 
 	app.register_blueprint(views, url_prefix='/')
-
-	#with app.app_context():
-	#	db.create_all()
-
 	return app
-
-
-#def create_database(app):
-#	if not path.exists('website/' + DB_NAME):
-#		db.create_all(app=app)
-#		print('Database created successfully!')
-
-
-
-
-
-
-
 

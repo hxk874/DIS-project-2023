@@ -1,10 +1,7 @@
-{% extends "base.html" %} {% block title %} Home {% endblock %} {% block content %}
+{% extends "base.html" %} {% block title %} upload {% endblock %} {% block content %}
     <h1 align="center">Upload your sample</h1>
     <br/>
     <p>Please make sure your file is a csv file. </p>
-    
-
-
 
     <form method = "POST" enctype="multipart/form-data" action = "/"> 
         <input
@@ -13,11 +10,10 @@
           id="tableName"
           name="tableName"
           placeholder="Enter table name"
-        />
+          />
         <br/>
         <input type="file" name="file" accept=".csv">
         <input type = "submit" value="Upload file"> 
-
     </form>
     <br/>
     <form action="/show_data" target="_blank">
