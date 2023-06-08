@@ -97,20 +97,6 @@ def parseCSV(filePath, tablename):
 	return jsonify({})
 
 
-@views.route('/show_data')
-def showData():
-	# Uploaded File Path
-	data_file_path = session.get('uploaded_data_file_path', None)
-	# read csv
-	uploaded_df = pd.read_csv(data_file_path, encoding='unicode_escape')
-	
-	# hent fil ..
-
-	# Converting to html Table
-	uploaded_df_html = uploaded_df.to_html()
-	return render_template('show_data.html', data_var=uploaded_df_html)
-
-
 
 
 @views.route("/query", methods=['GET','POST'])
@@ -131,7 +117,7 @@ def query():
 		maxChemElm = cur.fetchall()
 		cur.execute(f'SELECT MIN({chemElm}) FROM {table} WHERE {chemElm} != \'NaN\' ;')
 		conn.commit()
-		minChemElm = cur.fetcall()
+		minChemElm = cur.fetchall()
 
 		selectCol = request.form.get('selectCol')
 		cur.execute (f'SELECT DISTINCT {selectCol} FROM {table};')
@@ -146,3 +132,21 @@ def querysubmit():
 	
 	
 	return render_template("querysubmit.html")
+
+
+@views.route("/tables", methods=['GET','POST'])
+def tables():
+	cur.execute('SELECT table_name FROM information_schema.tables WHERE table_schema = \'public\';')
+	conn.commit()
+	tablelist = cur.fetchall()
+
+	
+	
+	return render_template("tables.html", tablelist=tablelist)
+
+@views.route('/delete-table/<table>', methods=['GET'])
+def delete_table(table):  
+	print(table)
+	cur.execute(f'DROP TABLE IF EXISTS {table};')
+	conn.commit()
+	return redirect("/tables")
