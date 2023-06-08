@@ -27,6 +27,7 @@ def uploadFile():
 		
 		
 		tablename = str(request.form.get('tableName'))
+		tablename = tablename.replace(' ', '_')
 		try: # check if table already exists
 			check = "SELECT * FROM ;"
 			cur.execute(check[:14]+tablename+check[14:])
@@ -37,6 +38,7 @@ def uploadFile():
 			cur.execute("ROLLBACK")
 			conn.commit()
 			tablename = request.form.get('tableName')
+			tablename = tablename.replace(' ', '_')
 			# upload file flask
 			f = request.files.get('file')
 			# Extracting uploaded file name
