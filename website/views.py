@@ -111,10 +111,20 @@ def showData():
 
 
 
-@views.route("/query", methods=['GET'])
+@views.route("/query", methods=['GET','POST'])
 def query():
 	cur.execute('SELECT table_name FROM information_schema.tables WHERE table_schema = \'public\';')
 	conn.commit()
 	tablelist = cur.fetchall()
+	if request.method == 'GET':
+		
+		return render_template("query.html", tablelist=tablelist)
+	if request.method == 'POST':
+		table = request.form.get('table')
+		elm1 = request.form.get('chemElm1')
+		elm2 = request.form.get('chemElm1')
+		flash(f'You chose {elm1} and {elm2} from {table}', category='success')
+
+		
+		return render_template("query.html", tablelist=tablelist)
 	
-	return render_template("query.html", tablelist=tablelist)

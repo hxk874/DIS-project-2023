@@ -1,16 +1,17 @@
 {% extends "base.html" %} {% block title %}Query{% endblock %} {% block content %}
 <br />
 <h1 align="center">Inspect a table</h1>
+<form method="POST">
     <br/>
-    <p> Choose the table you want to inspect. </p>
-    <p style="font-family:verdana">
-      <SELECT name="tablename" style="font-family:verdana">
+    <div class="form-group">
+    <label for="table"> Choose the table you want to inspect. </label>
+    <br />
+      <SELECT id="table" name="table">
       {% for t in tablelist %}
         <OPTION value={{t[0]}}>{{t[0]}}</OPTION>
       {% endfor %}
       </SELECT>
-      </p>
-    <br/>
+    </div>
       <div class="form-group">
         <label for="chemElm1"> Compute maximum samplevalue of a chemical element. </label>
         <input
@@ -29,6 +30,26 @@
           name="chemElm2"
           placeholder="Enter a chemical element" />
       </div>
+      
+      <div class="dropdown">
+        <button type="button" class="btn btn-primary dropdown-toggle"
+        data-toggle="dropdown">Pick an element</button>
+        
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="#">SiO2</a>
+          <a class="dropdown-item" href="#">Al2O3</a>
+          <a class="dropdown-item" href="#">CaO</a>
+          <a class="dropdown-item" href="#">Na2O</a>
+          <a class="dropdown-item" href="#">K2O</a>
+          <a class="dropdown-item" href="#">FeO</a>
+          <a class="dropdown-item" href="#">Fe2O3</a>
+          <a class="dropdown-item" href="#">FeO_total</a>
+          <a class="dropdown-item" href="#">MgO</a>
+          <a class="dropdown-item" href="#">MnO</a>
+          <a class="dropdown-item" href="#">P2O5</a>
+        </div>
+    </div>
+
       <br />
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
