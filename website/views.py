@@ -124,12 +124,12 @@ def query():
 		flash(f'You chose table {table}', category='success')
 		
 		chemElm = request.form.get('chemElm')
-		cur.execute(f'SELECT MAX({chemElm}) FROM {table};')
+		cur.execute(f'SELECT MAX({chemElm}) FROM {table} WHERE {chemElm} != \'NaN\' ;')
 		conn.commit()
-		maxChemElm = cur.fetchone()
-		cur.execute(f'SELECT MIN({chemElm}) FROM {table};')
+		maxChemElm = cur.fetchall()
+		cur.execute(f'SELECT MIN({chemElm}) FROM {table} WHERE {chemElm} != \'NaN\' ;')
 		conn.commit()
-		minChemElm = cur.fetchone()
+		minChemElm = cur.fetcall()
 
 		selectCol = request.form.get('selectCol')
 		cur.execute (f'SELECT DISTINCT {selectCol} FROM {table};')

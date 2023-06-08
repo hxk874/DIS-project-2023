@@ -14,31 +14,29 @@
 <br />
 
 
+<p class="font-weight-bold">Output of selected type {{selectCol}}</p>
+
+
+<div {{table}} </div>
+<br/>
+
 <div class="row mb-3">
-  <label for="colFormLabel" class="col-sm-2 col-form-label">Email</label>
+  <label for="table" class="col-sm-2 col-form-label">Table</label>
   <div class="col-sm-10">
-    <input type="email" class="form-control" id="colFormLabel" placeholder="col-form-label">
+    <input type="table" class="border border-secondary p-2 mb-2"> >
   </div>
 </div>
 
 
-
-<div class="mb-3 row">
-  <label for="static_tableName" class="col-sm-2 col-form-label"> Table </label>
-  <div class="col-sm-10">
-    <input type="text" readonly class="form-control-plaintext" id="static_tableName" value="table"> {{table}}
-  </div>
-</div>
-
-<span class="border border-secondary">
-
-<p class="font-weight-bold">Output of selected type {{selectCol}}</p> 
+<p class="font-weight-bold">Output of selected type {{selectCol}}</p>
+<div class="border border-secondary p-2 mb-2">
   {%for i in selectOutput%}
     {{i}}
     <br/>
   {%endfor%}
+</div>
 <br/>
-</span>
+
 
 
 {% endblock %}
