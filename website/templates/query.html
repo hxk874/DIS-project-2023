@@ -1,6 +1,7 @@
 {% extends "base.html" %} {% block title %}Query{% endblock %} {% block content %}
 <br />
 <h1 align="center">Inspect a table</h1>
+
 <form method="POST">
     <br/>
     <div class="form-group">
@@ -12,46 +13,51 @@
       {% endfor %}
       </SELECT>
     </div>
-      <div class="form-group">
-        <label for="chemElm1"> Compute maximum samplevalue of a chemical element. </label>
-        <input
-          type="text"
-          class="form-control"
-          id="chemElm1"
-          name="chemElm1"
-          placeholder="Enter a chemical element" />
-      </div>
-      <div class="form-group">
-        <label for="chemElm2"> Compute minimum samplevalue of a chemical element.</label>
-        <input
-          type="text"
-          class="form-control"
-          id="chemElm2"
-          name="chemElm2"
-          placeholder="Enter a chemical element" />
-      </div>
-      
-      <div class="dropdown">
-        <button type="button" class="btn btn-primary dropdown-toggle"
-        data-toggle="dropdown">Pick an element</button>
-        
-        <div class="dropdown-menu">
-          <a class="dropdown-item" href="#">SiO2</a>
-          <a class="dropdown-item" href="#">Al2O3</a>
-          <a class="dropdown-item" href="#">CaO</a>
-          <a class="dropdown-item" href="#">Na2O</a>
-          <a class="dropdown-item" href="#">K2O</a>
-          <a class="dropdown-item" href="#">FeO</a>
-          <a class="dropdown-item" href="#">Fe2O3</a>
-          <a class="dropdown-item" href="#">FeO_total</a>
-          <a class="dropdown-item" href="#">MgO</a>
-          <a class="dropdown-item" href="#">MnO</a>
-          <a class="dropdown-item" href="#">P2O5</a>
+
+
+    <p> Here you can get the max and min of your chosen chemical element. </p>
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="inputGroupSelect01">Options</label>
         </div>
-    </div>
+      <select class="custom-select" id="chemElm" name="chemElm">
+        <option selected> </option>
+        <option value="SiO2">SiO2</option>
+        <option value="Al2O3">Al2O3</option>
+        <option value="CaO">CaO</option>
+        <option value="Na2O">Na2O</option>
+        <option value="K2O">K2O</option>
+        <option value="FeO">FeO</option>
+        <option value="Fe2O3">Fe2O3</option>
+        <option value="FeO_total">FeO_total</option>
+        <option value="MgO">MgO</option>
+        <option value="MnO">MnO</option>
+        <option value="P2O5">P2O5</option>
+      </select>
+      </div>
+
+
+      <p> Select something you wish to know from your chosen table. </p>
+      
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="inputGroupSelect01">Options</label>
+        </div>
+      <select class="custom-select" id="selectCol" name="selectCol">
+        <option selected> * </option>
+        <option value="location">location</option>
+        <option value="tectonic_set">tectonic_set</option>
+        <option value="rock_name">rock_name</option>
+        <option value="rock_type">rock_type</option>
+        <option value="matrial">matrial</option>
+        <option value="loss">loss</option>
+      </select>
+      </div>
 
       <br />
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn btn-dark">Submit</button>
     </form>
 
     {% endblock %}

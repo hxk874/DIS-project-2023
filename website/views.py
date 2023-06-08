@@ -117,14 +117,30 @@ def query():
 	conn.commit()
 	tablelist = cur.fetchall()
 	if request.method == 'GET':
-		
 		return render_template("query.html", tablelist=tablelist)
 	if request.method == 'POST':
-		table = request.form.get('table')
-		elm1 = request.form.get('chemElm1')
-		elm2 = request.form.get('chemElm1')
-		flash(f'You chose {elm1} and {elm2} from {table}', category='success')
 
+		table = request.form.get('table')
+		flash(f'You chose table {table}', category='success')
 		
-		return render_template("query.html", tablelist=tablelist)
+		chemElm = request.form.get('chemElm')
+		cur.execute(f'SELECT MAX({chemElm}) FROM {table};')
+		conn.commit()
+		maxChemElm = cur.fetchone()
+		cur.execute(f'SELECT MIN({chemElm}) FROM {table};')
+		conn.commit()
+		minChemElm = cur.fetchone()
+
+		selectCol = request.form.get('selectCol')
+		cur.execute (f'SELECT DISTINCT {selectCol} FROM {table};')
+		conn.commit()
+		selectOutput = cur.fetchall()
+
+		return render_template("querysubmit.html", table=table, selectOutput=selectOutput, chemElm=chemElm, maxChemElm=maxChemElm, minChemElm=minChemElm, selectCol=selectCol, tablelist=tablelist)
 	
+
+@views.route("/querysubmit", methods=['GET','POST'])
+def querysubmit():
+	
+	
+	return render_template("querysubmit.html")

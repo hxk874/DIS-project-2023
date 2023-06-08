@@ -1,0 +1,44 @@
+{% extends "base.html" %} {% block title %} Querysubmit {% endblock %} {% block content %}
+<br />
+<h1 align="center">Your table</h1>
+
+<p class="font-weight-bold">You choose table: </p> {{table}} 
+
+
+<p class="font-weight-bold">Maximum of {{chemElm}}</p> {{maxchemElm}}
+<br/>             
+<p class="font-weight-bold">Minimum of {{chemElm}}</p> {{minchemElm}}
+<br/>
+
+<p class="font-weight-bold">Display of SiO2 vs. K2O + Na2O</p> 
+<br />
+
+
+<div class="row mb-3">
+  <label for="colFormLabel" class="col-sm-2 col-form-label">Email</label>
+  <div class="col-sm-10">
+    <input type="email" class="form-control" id="colFormLabel" placeholder="col-form-label">
+  </div>
+</div>
+
+
+
+<div class="mb-3 row">
+  <label for="static_tableName" class="col-sm-2 col-form-label"> Table </label>
+  <div class="col-sm-10">
+    <input type="text" readonly class="form-control-plaintext" id="static_tableName" value="table"> {{table}}
+  </div>
+</div>
+
+<span class="border border-secondary">
+
+<p class="font-weight-bold">Output of selected type {{selectCol}}</p> 
+  {%for i in selectOutput%}
+    {{i}}
+    <br/>
+  {%endfor%}
+<br/>
+</span>
+
+
+{% endblock %}
