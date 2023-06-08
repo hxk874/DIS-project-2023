@@ -2,6 +2,11 @@
 
 <h3 align="center">Tables</h3>
 
+{% for t in tablelist %}
+        {{t[0]}} <button type="button" class="close" onClick="delete-table({t})">
+            <span aria-hidden="true">&times;</span>
+          </button><br />
+      {% endfor %}
 
 
 {% endblock %}

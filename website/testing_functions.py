@@ -85,7 +85,6 @@ conn.commit()
 print(cur.fetchall())
 
 
-
-text = 'hej med dig'
-text = text.replace(' ', '-')
-print(text)
+name = 'island_2'
+cur.execute(f'DROP TABLE IF EXISTS {name};')
+conn.commit()

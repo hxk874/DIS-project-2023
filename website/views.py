@@ -131,7 +131,7 @@ def query():
 		maxChemElm = cur.fetchall()
 		cur.execute(f'SELECT MIN({chemElm}) FROM {table} WHERE {chemElm} != \'NaN\' ;')
 		conn.commit()
-		minChemElm = cur.fetcall()
+		minChemElm = cur.fetchall()
 
 		selectCol = request.form.get('selectCol')
 		cur.execute (f'SELECT DISTINCT {selectCol} FROM {table};')
@@ -146,3 +146,21 @@ def querysubmit():
 	
 	
 	return render_template("querysubmit.html")
+
+
+@views.route("/tables", methods=['GET','POST'])
+def tables():
+	cur.execute('SELECT table_name FROM information_schema.tables WHERE table_schema = \'public\';')
+	conn.commit()
+	tablelist = cur.fetchall()
+
+	
+	
+	return render_template("tables.html", tablelist=tablelist)
+
+@views.route('/delete-table', methods=['POST'])
+def delete_table(table):  
+	print(table)
+	cur.execute(f'DROP TABLE IF EXISTS {table[0]};')
+	conn.commit()
+	return jsonify({})
