@@ -97,20 +97,6 @@ def parseCSV(filePath, tablename):
 	return jsonify({})
 
 
-@views.route('/show_data')
-def showData():
-	# Uploaded File Path
-	data_file_path = session.get('uploaded_data_file_path', None)
-	# read csv
-	uploaded_df = pd.read_csv(data_file_path, encoding='unicode_escape')
-	
-	# hent fil ..
-
-	# Converting to html Table
-	uploaded_df_html = uploaded_df.to_html()
-	return render_template('show_data.html', data_var=uploaded_df_html)
-
-
 
 
 @views.route("/query", methods=['GET','POST'])
@@ -158,9 +144,9 @@ def tables():
 	
 	return render_template("tables.html", tablelist=tablelist)
 
-@views.route('/delete-table', methods=['POST'])
+@views.route('/delete-table/<table>', methods=['GET'])
 def delete_table(table):  
 	print(table)
-	cur.execute(f'DROP TABLE IF EXISTS {table[0]};')
+	cur.execute(f'DROP TABLE IF EXISTS {table};')
 	conn.commit()
-	return jsonify({})
+	return redirect("/tables")
