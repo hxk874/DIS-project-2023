@@ -10,56 +10,43 @@ from os import path
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
 conn = psycopg2.connect(host="localhost", user="postgres", dbname="dis2023", password="wildeisfine",port="5432")
 cur = conn.cursor()
 
-cur.execute('SELECT * FROM sample;')
-sql = 'SELECT * FROM sample;'
-conn.commit()
 
-q1 = cur.fetchall()
+def harkerdiagrams(table):
+    sql = 'SELECT mgo, sio2, feo_total, al2o3, cao, mno, p2o5 FROM ;'
+    cur.execute(sql[:56]+table+sql[56:])
 
-q2 = pd.read_sql(sql, conn)
-print(q2['sio2'])
+    conn.commit()
 
-def makeHarker(fileList, elementsList, datasetNames, outputFileName):
+    q1 = cur.fetchall()
 
-    # Import required modules
-    import pandas as pd
-    import matplotlib.pyplot as plt
 
-    datasetsDict = {}
+    elements = ['mgo', 'sio2', 'feo_total', 'al2o3', 'cao', 'mno', 'p2o5']
+    df = pd.DataFrame(q1, columns=elements)
 
-    # Import data files, convert elements to list
-    for i, f in enumerate(fileList):
-        d = pd.read_sql(sql, conn)
-        dataName = datasetNames[i]
-
-        for e in elementsList:
-            datasetsDict[(dataName, e)] = d[e].tolist()
-
-    # Change font
-    plt.rcParams['font.family'] = 'Arial'
-    plt.rcParams['font.size'] = 8
 
     # Set up 2x3 plots
-    fig, ((ax1, ax2), (ax3, ax4), (ax5, ax6)) = plt.subplots(3, 2)
+    fig, ((ax1, ax2, ax3), (ax4, ax5, ax6)) = plt.subplots(2, 3)
     sub = [ax1, ax2, ax3, ax4, ax5, ax6]
 
-    labels = [r'SiO$_2$ (wt%)', r'FeO$_T$ (wt%)', r'Al$_2$O$_3$ (wt%)', 'CaO (wt%)', r'TiO$_2$ (wt%)',
-              r'P$_2$O$_5$ (wt%)']
+    elements = ['mgo', 'sio2', 'feo_total', 'al2o3', 'cao', 'mno', 'p2o5']
+    elements2 = ['sio2', 'feo_total', 'al2o3', 'cao', 'mno', 'p2o5']
+
+    labels = [r'SiO$_2$ (wt%)', r'FeO$_T$ (wt%)', r'Al$_2$O$_3$ (wt%)', r'CaO (wt%)', r'MnO (wt%)',
+                r'P$_2$O$_5$ (wt%)']
     symbolsDict = {'Vaigat': '^', 'Maligat': 'v', 'Kanisut': 'p', 'Hareoen': 'D', 'Delta': 'o'}
     coloursDict = {'Vaigat': '#7fc97f', 'Maligat': '#beaed4', 'Kanisut': '#fdc086',
-                   'Hareoen': '#386cb0', 'Delta': '#f0027f'}
+                    'Hareoen': '#386cb0', 'Delta': '#f0027f'}
     titles = ['a)', 'b)', 'c)', 'd)', 'e)', 'f)']
 
-    # Make each plot, add labels, etc.
-    for s, e in enumerate(elements[1:]):
-        for n in datasetNames:
-            sub[s].plot(datasetsDict[n, 'MgO'], datasetsDict[n, e], symbolsDict[n], markerfacecolor=coloursDict[n],
-                        markeredgecolor=coloursDict[n], markersize=4, label=n)
+    x = df['mgo']
+    for s in range(6):
+        sub[s].plot(x, df[elements2[s]], symbolsDict['Delta'], markerfacecolor=coloursDict['Delta'],
+                                    markeredgecolor='black', markersize=4, label=table)
 
         sub[s].set_xlabel('MgO (wt%)')
         sub[s].set_ylabel(labels[s])
@@ -68,7 +55,11 @@ def makeHarker(fileList, elementsList, datasetNames, outputFileName):
 
     plt.tight_layout()
 
-    # Save file
-    fig.set_size_inches(6, 8)
-    name = outputFileName + '.png'
+    fig.set_size_inches(8, 6)
+    name = table + '.png'
     plt.savefig(name, dpi=300, bbox_inches='tight', pad_inches=0.25)
+
+harkerdiagrams('sample')
+#print(len('SELECT mgo, sio2, feo_total, al2o3, cao, mno, p2o5 FROM ;'))
+#sql = 'SELECT mgo, sio2, feo_total, al2o3, cao, mno, p2o5 FROM ;'
+#print(sql[:56]+'sample'+sql[56:])
