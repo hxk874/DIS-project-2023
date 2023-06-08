@@ -1,27 +1,16 @@
 {% extends "base.html" %} {% block title %}Info{% endblock %} {% block content %}
-<br />
+<br/>
   <h3 align="center">Information and navigation</h3>
-    <form method = "POST" enctype="multipart/form-data" action = "/"> 
-        
-          <div class="form-group">
-            <label for="firstName">First Name</label>
-            <input
-              type="text"
-              class="form-control"
-              id="firstName"
-              name="firstName"
-              placeholder="Enter first name"
-            />
-          </div>
-          <br />
-          <form method="POST">
-            <textarea name="note" id="note" class="form-control" placeholder="Write anything you wish - mabye your visited locations, experiences, and former occupations."></textarea>
-            <br />
-            <div align="center"> 
+  <br/>
 
-              <button type="submit" class="btn btn-primary"> Submit </button>
-            </div>
-          </form>
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+  <dl class="row">
+    <dt class="col-sm-3">Info</dt>
+    <dd class="col-sm-9">This is the home page. From here you can navigate to 'Upload file', 'Inspect table', or 'My tables' </dd>
+  
+    <dt class="col-sm-3">Something</dt>
+    <dd class="col-sm-9">Something</dd>
+  
+   
+  </dl>
+   
 {% endblock %}

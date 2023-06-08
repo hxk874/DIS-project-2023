@@ -1,32 +1,32 @@
 {% extends "base.html" %} {% block title %} Querysubmit {% endblock %} {% block content %}
 <br />
 <h1 align="center">Inspect your table</h1>
-
+<br />
 <div class="row mb-3">
   <label for="table" class="col-sm-2 col-form-label"> <p class="font-weight-bold">Chosen table</p> </label>
-  <div class="border border-secondary p-2 mb-2"> {{table}} </div>  
+  <div class="border border-secondary p-2 mb-2" style="width: 400px;"> {{table}} </div>  
 </div>
 
-
-<div class="row mb-3">
+<div class="row mb-lg-3">
   <label for="table" class="col-sm-2 col-form-label"> <p class="font-weight-bold">Maximum of {{chemElm}}</p> </label>
-  <div class="border border-secondary p-2 mb-2"> {{maxChemElm[0][0]}} (WT%) </div>  
+  <div class="border border-secondary p-2 mb-2" style="width: 400px;"> {{maxChemElm[0][0]}} (WT%) </div>  
 </div>
 
 
 <div class="row mb-3">
   <label for="table" class="col-sm-2 col-form-label"> <p class="font-weight-bold">Minimum of {{chemElm}}</p> </label>
-  <div class="border border-secondary p-2 mb-2"> {{minChemElm[0][0]}} (WT%) </div>
+  <div class="border border-secondary p-2 mb-2" style="width: 400px;"> {{minChemElm[0][0]}} (WT%) </div>
 </div>
 
-<p class="font-weight-bold">Output of selected type {{selectCol}}</p>
-<div class="border border-secondary p-2 mb-2">
-  {%for i in selectOutput%}
-    {{i}}
+<div class="row mb-3">
+  <label for="table" class="col-sm-2 col-form-label"> <p class="font-weight-bold">Selected attribute: {{selectCol}}</p> </label>
+  <div class="border border-secondary p-2 mb-2" style="width: 400px;"> {%for i in selectOutput%}
+    {{i[0]}}
     <br/>
-  {%endfor%}
+  {%endfor%} </div>
 </div>
-<br/>
+
+
 
 <p class="font-weight-bold">  <p class="font-weight-bold">Display of SiO2 vs. K2O + Na2O</p> </p> 
 
