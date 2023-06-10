@@ -109,29 +109,43 @@ def query():
 	tablelist = cur.fetchall()
 	if request.method == 'GET':
 		return render_template("query.html", tablelist=tablelist)
+	
+
 	if request.method == 'POST':
 
-		table = request.form.get('table')
-		flash(f'You chose table {table}', category='success')
-		
-		chemElm = request.form.get('chemElm')
-		cur.execute(f'SELECT MAX({chemElm}) FROM {table} WHERE {chemElm} != \'NaN\' ;')
-		conn.commit()
-		maxChemElm = cur.fetchall()
-		cur.execute(f'SELECT MIN({chemElm}) FROM {table} WHERE {chemElm} != \'NaN\' ;')
-		conn.commit()
-		minChemElm = cur.fetchall()
+		if request.form.get('submit_selected') == "submit_selected":
+			table = request.form.get('table')
+			flash(f'You chose table {table}', category='success')
+			
+			chemElm = request.form.get('chemElm')
+			cur.execute(f'SELECT MAX({chemElm}) FROM {table} WHERE {chemElm} != \'NaN\' ;')
+			conn.commit()
+			maxChemElm = cur.fetchall()
+			cur.execute(f'SELECT MIN({chemElm}) FROM {table} WHERE {chemElm} != \'NaN\' ;')
+			conn.commit()
+			minChemElm = cur.fetchall()
 
-		selectCol = request.form.get('selectCol')
-		cur.execute (f'SELECT DISTINCT {selectCol} FROM {table};')
-		conn.commit()
-		selectOutput = cur.fetchall()
+			selectCol = request.form.get('selectCol')
+			cur.execute (f'SELECT DISTINCT {selectCol} FROM {table};')
+			conn.commit()
+			selectOutput = cur.fetchall()
 
-		# create plots
-		harkerdiagrams(table)
-		image = table + '.png'
+			# create plots
+			harkerdiagrams(table)
+			image = table + '.png'
+			return render_template("querysubmit.html", table=table,  selectOutput=selectOutput, chemElm=chemElm, maxChemElm=maxChemElm, minChemElm=minChemElm, selectCol=selectCol, tablelist=tablelist, image=image)
 
-		return render_template("querysubmit.html", table=table, selectOutput=selectOutput, chemElm=chemElm, maxChemElm=maxChemElm, minChemElm=minChemElm, selectCol=selectCol, tablelist=tablelist, image=image)
+		if request.form.get('delete') == "delete":	
+			table = request.form.get('table')
+			param = request.form.get('param')
+			num = request.form.get('num')
+
+			cur.execute(f'DELETE FROM {table} WHERE {param} < {num};')
+			conn.commit()
+			flash(f'Deleted all rows where {param} < {num}', category='success')
+			return render_template("query.html", param=param, num=num, table=table, tablelist=tablelist)
+
+		return render_template("querysubmit.html", param=param, num=num, table=table, selectOutput=selectOutput, chemElm=chemElm, maxChemElm=maxChemElm, minChemElm=minChemElm, selectCol=selectCol, tablelist=tablelist, image=image)
 	
 
 @views.route("/querysubmit", methods=['GET','POST'])
@@ -152,6 +166,10 @@ def delete_table(table):
 	cur.execute(f'DROP TABLE IF EXISTS {table};')
 	conn.commit()
 	return redirect("/tables")
+
+
+
+
 
 
 # –––––– function to create harker diagrams –––––––

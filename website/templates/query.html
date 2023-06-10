@@ -4,7 +4,7 @@
 
 <form method="POST">
     <br/>
-    <p> Here you can get the max and min of your chosen chemical element. </p>
+    <p> Choose a table </p>
     <div class="input-group mb-3">
       <div class="input-group-prepend">
         <label class="input-group-text" for="inputGroupSelect01">Options</label>
@@ -17,7 +17,6 @@
       </div>
 
     <p> Here you can get the max and min of your chosen chemical element. </p>
-
       <div class="input-group mb-3">
         <div class="input-group-prepend">
           <label class="input-group-text" for="inputGroupSelect01">Options</label>
@@ -57,11 +56,7 @@
 
       <br />
       <button type="submit" class="btn btn-dark" name="submit_selected" value="submit_selected">Submit</button>
-    </form>
-      
-    <br />
 
-    <form method="POST">
       <p> Delete all samples where a specific parameter/chemical element does not meet your satisfaction. </p>
       <div class="input-group mt-3 mb-3">
         <div class="input-group-prepend">
@@ -72,8 +67,8 @@
           <option value="SiO2">SiO2</option>
           <option value="MgO" >MgO</option>
         </select>
-          <input type="input-group-text" class="form-control" placeholder="Number" aria-label="Number" id="num">
-          <button type="submit" class="btn btn-dark" name="delete_button" value="Delete">Submit</button>
+          <input type="input-group-text" class="form-control" id="num" name="num" placeholder="Number" aria-label="num">
+          <button type="submit" class="btn btn-dark" name="delete" value="delete">Submit</button>
       </div>
     </form>
       
