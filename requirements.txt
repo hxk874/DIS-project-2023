@@ -3,3 +3,9 @@ flask_bcrypt
 flask_login
 flask_wtf
 psycopg2
+pandas
+matplotlib
+matplotlib.pyplot
+os
+fileinput
+distutils
