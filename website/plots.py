@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, flash, jsonify
 #from . import db, app, UPLOAD_FOLDER
+#from . import IMAGE_FOLDER
 import json
 from distutils.log import debug
 from fileinput import filename
@@ -12,6 +13,7 @@ from flask_sqlalchemy import SQLAlchemy
 import psycopg2
 import matplotlib.pyplot as plt
 
+IMAGE_FOLDER = os.path.join('staticFiles', 'images')
 conn = psycopg2.connect(host="localhost", user="postgres", dbname="dis2023", password="wildeisfine",port="5432")
 cur = conn.cursor()
 
@@ -56,10 +58,13 @@ def harkerdiagrams(table):
     plt.tight_layout()
 
     fig.set_size_inches(8, 6)
+    img_placement = 'website/'+str(IMAGE_FOLDER)
     name = table + '.png'
-    plt.savefig(name, dpi=300, bbox_inches='tight', pad_inches=0.25)
+    plt.savefig(os.path.join(img_placement,name),dpi=300, bbox_inches='tight', pad_inches=0.25)
+    #plt.savefig(name, dpi=300, bbox_inches='tight', pad_inches=0.25)
 
-harkerdiagrams('sample')
+
+harkerdiagrams('test1')
 #print(len('SELECT mgo, sio2, feo_total, al2o3, cao, mno, p2o5 FROM ;'))
 #sql = 'SELECT mgo, sio2, feo_total, al2o3, cao, mno, p2o5 FROM ;'
 #print(sql[:56]+'sample'+sql[56:])

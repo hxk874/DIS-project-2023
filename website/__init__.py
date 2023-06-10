@@ -5,22 +5,15 @@ from flask import *
 import os
 from os import path
 from werkzeug.utils import secure_filename
-from flask_sqlalchemy import SQLAlchemy # ILLEGAL
 import psycopg2
 
-#engine = create_engine('http://127.0.0.1:5000')
-
-UPLOAD_FOLDER = os.path.join('staticFiles', 'uploads')
+UPLOAD_FOLDER = os.path.join('static', 'uploads')
+IMAGE_FOLDER = os.path.join('static', 'images')
 
 # Define allowed files
 ALLOWED_EXTENSIONS = {'csv'}
 
-#db = SQLAlchemy()
-#DB_NAME = "database.db"
-
-# database url: jdbc:postgresql://localhost:5432/postgres
-
-conn = psycopg2.connect(host="localhost", user="postgres", dbname="postgres", password="nh3M9",port="5432")
+conn = psycopg2.connect(host="localhost", user="postgres", dbname="dis2023", password="wildeisfine",port="5432")
 cur = conn.cursor()
 
 def create_app():
