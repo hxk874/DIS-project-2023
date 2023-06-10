@@ -88,3 +88,12 @@ print(cur.fetchall())
 name = 'island_2'
 cur.execute(f'DROP TABLE IF EXISTS {name};')
 conn.commit()
+
+"""objects = ('MIN', 'MAX')
+		y_pos = 
+		performance = [minChemElm, maxChemElm]
+
+		plt.bar(y_pos, performance, align='center', alpha=0.5)
+		plt.xticks(y_pos, objects)
+		plt.ylabel('Usage')
+		plot = plt.show()"""

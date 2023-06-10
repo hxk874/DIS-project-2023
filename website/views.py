@@ -8,6 +8,9 @@ import os
 from os import path
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
+import matplotlib.pyplot as plt; plt.rcdefaults()
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 views = Blueprint('views', __name__)
@@ -129,8 +132,6 @@ def query():
 
 @views.route("/querysubmit", methods=['GET','POST'])
 def querysubmit():
-	
-	
 	return render_template("querysubmit.html")
 
 
@@ -139,9 +140,6 @@ def tables():
 	cur.execute('SELECT table_name FROM information_schema.tables WHERE table_schema = \'public\';')
 	conn.commit()
 	tablelist = cur.fetchall()
-
-	
-	
 	return render_template("tables.html", tablelist=tablelist)
 
 @views.route('/delete-table/<table>', methods=['GET'])
