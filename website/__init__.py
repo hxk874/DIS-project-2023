@@ -6,6 +6,10 @@ import os
 from os import path
 from werkzeug.utils import secure_filename
 import psycopg2
+import matplotlib.pyplot as plt
+import matplotlib
+
+matplotlib.use('Agg')
 
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 IMAGE_FOLDER = os.path.join('static', 'images')

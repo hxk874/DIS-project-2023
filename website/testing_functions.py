@@ -97,3 +97,8 @@ conn.commit()
 		plt.xticks(y_pos, objects)
 		plt.ylabel('Usage')
 		plot = plt.show()"""
+
+image = 'new_table.png'
+x = url_for('static', filename=('/images/'+image))
+
+print(str(x))
