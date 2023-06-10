@@ -2,9 +2,17 @@
     <br/>
     <h1 align="center">Upload your sample</h1>
     <br/>
-    <p>Please make sure your file is a csv file. </p>
     <p>You can find sample files from <a href="https://georoc.eu/georoc/new-start.asp" target="_blank">GeoRoc</a>, which can be uploaded directly here.  </p>
-    
+    <p> Here are some examples of different categories:
+      <ul>
+        <li><a href="https://georoc.eu/georoc/precompiled/metadata.php?doi=10.25625/KAIVCT" target="_blank">Rift Volcanics</a>
+        <li><a href="https://georoc.eu/georoc/precompiled/metadata.php?doi=10.25625/1VOFM5" target="_blank">Complex Volcanic Settings</a>
+        <li><a href="https://georoc.eu/georoc/precompiled/metadata.php?doi=10.25625/WFJZKY" target="_blank">Ocean Island Groups</a>
+        <li><a href="https://georoc.eu/georoc/precompiled/metadata.php?doi=10.25625/2JETOA" target="_blank">Rock Types</a>
+      </ul> 
+    </p> 
+
+
     <form method = "POST" enctype="multipart/form-data" > 
         <form novalidate>
         <input
@@ -15,6 +23,8 @@
           placeholder="Enter table name" required
           />
         <br/>
+        <p>Please make sure your file is a csv file. </p>
+        
         <input type="file" name="file" accept=".csv">
         <input type = "submit" value="Upload file"> 
     </form>
