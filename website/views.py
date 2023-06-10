@@ -139,13 +139,14 @@ def query():
 			table = request.form.get('table')
 			param = request.form.get('param')
 			num = request.form.get('num')
+			ope = request.form.get('ope')
 
-			cur.execute(f'DELETE FROM {table} WHERE {param} < {num};')
+			cur.execute(f'DELETE FROM {table} WHERE {param} {ope} {num};')
 			conn.commit()
-			flash(f'Deleted all rows where {param} < {num}', category='success')
-			return render_template("query.html", param=param, num=num, table=table, tablelist=tablelist)
+			flash(f'Deleted all rows where {param} {ope} {num}', category='success')
+			return render_template("query.html", ope=ope, param=param, num=num, table=table, tablelist=tablelist)
 
-		return render_template("querysubmit.html", param=param, num=num, table=table, selectOutput=selectOutput, chemElm=chemElm, maxChemElm=maxChemElm, minChemElm=minChemElm, selectCol=selectCol, tablelist=tablelist, image=image)
+		return render_template("querysubmit.html", ope=ope, param=param, num=num, table=table, selectOutput=selectOutput, chemElm=chemElm, maxChemElm=maxChemElm, minChemElm=minChemElm, selectCol=selectCol, tablelist=tablelist, image=image)
 	
 
 @views.route("/querysubmit", methods=['GET','POST'])
