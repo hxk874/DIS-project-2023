@@ -4,10 +4,10 @@
 
 <form method="POST">
     <br/>
-    <p> Choose a table </p>
+    <p> Select a table from your uploaded files. </p>
     <div class="input-group mb-3">
       <div class="input-group-prepend">
-        <label class="input-group-text" for="inputGroupSelect01">Options</label>
+        <label class="input-group-text" for="inputGroupSelect01">Table</label>
       </div>
       <SELECT class="custom-select" id="table" name="table">
         {% for t in tablelist %}
@@ -16,10 +16,10 @@
       </SELECT>
       </div>
 
-    <p> Here you can get the max and min of your chosen chemical element. </p>
+    <p> Select a chemical element for which you want to know the minimum and maximum samplevalue. </p>
       <div class="input-group mb-3">
         <div class="input-group-prepend">
-          <label class="input-group-text" for="inputGroupSelect01">Options</label>
+          <label class="input-group-text" for="inputGroupSelect01">Parameter</label>
         </div>
       <select class="custom-select" id="chemElm" name="chemElm">
         <option value="SiO2">SiO2</option>
@@ -38,11 +38,9 @@
 
 
       <p> Select something you wish to know from your chosen table. </p>
-      
-
       <div class="input-group mb-3">
         <div class="input-group-prepend">
-          <label class="input-group-text" for="inputGroupSelect01">Options</label>
+          <label class="input-group-text" for="inputGroupSelect01">Parameter</label>
         </div>
       <select class="custom-select" id="selectCol" name="selectCol">
         <option value="location" selected> location</option>
@@ -54,13 +52,14 @@
       </select>
       </div>
 
-      <br />
       <button type="submit" class="btn btn-dark" name="submit_selected" value="submit_selected">Submit</button>
+      <br />
+      <br />
 
-      <p> Delete all samples where a specific parameter/chemical element does not meet your satisfaction. </p>
+      <p> Delete samples where a specific parameter/chemical element does not meet your satisfaction. </p>
       <div class="input-group mt-3 mb-3">
         <div class="input-group-prepend">
-          <label class="input-group-text" for="param">Options</label>
+          <label class="input-group-text" for="param">Parameter</label>
         </div>
         <select class="custom-select" id="param" name="param">
           <option value="loss" selected>loss</option>

@@ -7,17 +7,15 @@ from flask import *
 import os
 from os import path
 from werkzeug.utils import secure_filename
-from flask_sqlalchemy import SQLAlchemy
-import matplotlib.pyplot as plt; plt.rcdefaults()
-import numpy as np
 import matplotlib.pyplot as plt
-
 
 views = Blueprint('views', __name__)
 
-
 placement = 'website/'+str(UPLOAD_FOLDER)
+
+# Define the attributes that we use in the database.
 cols = ['UNIQUE_ID','TECTONIC SETTING', 'LOCATION', 'ROCK NAME','MATERIAL','ROCK TYPE', 'SIO2(WT%)', 'AL2O3(WT%)', 'CAO(WT%)', 'NA2O(WT%)', 'K2O(WT%)', 'FEO(WT%)', 'FE2O3(WT%)', 'FEOT(WT%)', 'MGO(WT%)', 'MNO(WT%)', 'P2O5(WT%)', 'LOI(WT%)']
+
 
 @views.route("/", methods=['GET'])
 def info():
@@ -27,53 +25,49 @@ def info():
 @views.route('/upload', methods=['GET', 'POST'])
 def uploadFile():
 	if request.method == 'POST':
-		
-		
 		tablename = str(request.form.get('tableName'))
 		tablename = tablename.replace(' ', '_')
+
 		try: # check if table already exists
 			check = "SELECT * FROM ;"
 			cur.execute(check[:14]+tablename+check[14:])
 			conn.commit()
 			if cur.fetchone():
 				flash('tablename already exists!', category='error')
-		except: 
+
+		except: # if tablename is not already used, create the table with that name in the database
 			cur.execute("ROLLBACK")
 			conn.commit()
 			tablename = request.form.get('tableName')
 			tablename = tablename.replace(' ', '_')
-			# upload file flask
-			f = request.files.get('file')
-			# Extracting uploaded file name
+
+			# access the uploaded file
+			f = request.files.get('file') 
 			data_filename = secure_filename(f.filename)
-			
 			f.save(os.path.join(placement, data_filename))
-			
 			session['uploaded_data_file_path'] = os.path.join(placement, data_filename)
-			#droptable = 'DROP TABLE IF EXISTS '
-			#cur.execute(droptable+tablename)
-			create = "CREATE TABLE (id SERIAL PRIMARY KEY, unique_id INT, tectonic_set VARCHAR(150), location VARCHAR(1000), rock_name VARCHAR(150), material VARCHAR(150), rock_type VARCHAR(150), siO2 FLOAT, al2o3 FLOAT, caO FLOAT, na2O FLOAT, k2O FLOAT, feO FLOAT, fe2O3 FLOAT, feO_total FLOAT, mgO FLOAT, mnO FLOAT, p2O5 FLOAT, loss FLOAT);"
 			
+			# create table in database
+			create = "CREATE TABLE (id SERIAL PRIMARY KEY, unique_id INT, tectonic_set VARCHAR(150), location VARCHAR(1000), rock_name VARCHAR(150), material VARCHAR(150), rock_type VARCHAR(150), siO2 FLOAT, al2o3 FLOAT, caO FLOAT, na2O FLOAT, k2O FLOAT, feO FLOAT, fe2O3 FLOAT, feO_total FLOAT, mgO FLOAT, mnO FLOAT, p2O5 FLOAT, loss FLOAT);"
 			cur.execute(create[:13]+tablename+create[12:])
 			conn.commit()
-			#cur.execute(f"CREATE TABLE {tablename} (id SERIAL PRIMARY KEY, unique_id INT, tectonic_set VARCHAR(150), location VARCHAR(1000), rock_name VARCHAR(150), material VARCHAR(150), rock_type VARCHAR(150), siO2 FLOAT, al2o3 FLOAT, caO FLOAT, na2O FLOAT, k2O FLOAT, feO FLOAT, fe2O3 FLOAT, feO_total FLOAT, mgO FLOAT, mnO FLOAT, p2O5 FLOAT, loss FLOAT);")
+			
 			parseCSV(session['uploaded_data_file_path'],tablename)
-
-			os.remove(os.path.join(placement, data_filename)) # remove csv file from uploads folder 
+			os.remove(os.path.join(placement, data_filename)) # remove the csv file from uploads folder 
 			flash('Data successfully uploaded!', category='success')
-			return render_template('upload.html')
 
+			return render_template('upload.html')
+		
 	return render_template('upload.html')
 
 
 def parseCSV(filePath, tablename):
-	# CVS Column Names
 	# Use Pandas to parse the CSV file
 	csvData = pd.read_csv(filePath, usecols=cols, encoding='unicode_escape')
 	csvData.dropna(subset='UNIQUE_ID',axis=0, inplace=True)
-    # Loop through the Rows
+
+    # Loop through the rows
 	for index, row in csvData.iterrows():
-		
 		sql = "INSERT INTO (unique_id, tectonic_set, location, rock_name, material, rock_type, siO2, al2o3, caO, na2O, k2O, feO, fe2O3, feO_total, mgO, mnO, p2O5, loss) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
 		values = (
 				row['UNIQUE_ID'], 
@@ -97,19 +91,24 @@ def parseCSV(filePath, tablename):
 				)
 		cur.execute(sql[:12]+tablename+sql[11:], values)
 		conn.commit()
+
 	return jsonify({})
-
-
 
 
 @views.route("/query", methods=['GET','POST'])
 def query():
+	# get list of all tables in the database
 	cur.execute('SELECT table_name FROM information_schema.tables WHERE table_schema = \'public\';')
 	conn.commit()
-	tablelist = cur.fetchall()
+	tablelist = cur.fetchall() # list of all tables in the database
+
 	if request.method == 'GET':
 		return render_template("query.html", tablelist=tablelist)
+	
+
 	if request.method == 'POST':
+
+		# select button
 		if request.form.get('submit_selected') == "submit_selected":
 			table = request.form.get('table')
 			flash(f'You chose the table \"{table}\"', category='success')
@@ -130,8 +129,10 @@ def query():
 			# create plots
 			harkerdiagrams(table)
 			image = table + '.png'
+
 			return render_template("querysubmit.html", table=table,  selectOutput=selectOutput, chemElm=chemElm, maxChemElm=maxChemElm, minChemElm=minChemElm, selectCol=selectCol, tablelist=tablelist, image=image)
 
+		# delete button
 		if request.form.get('delete') == "delete":	
 			table = request.form.get('table')
 			param = request.form.get('param')
@@ -141,6 +142,7 @@ def query():
 			cur.execute(f'DELETE FROM {table} WHERE {param} {ope} {num};')
 			conn.commit()
 			flash(f'Deleted all samples from \"{table}\" where {param} {ope} {num}', category='success')
+
 			return render_template("query.html", ope=ope, param=param, num=num, table=table, tablelist=tablelist)
 
 		return render_template("querysubmit.html", ope=ope, param=param, num=num, table=table, selectOutput=selectOutput, chemElm=chemElm, maxChemElm=maxChemElm, minChemElm=minChemElm, selectCol=selectCol, tablelist=tablelist, image=image)
@@ -153,27 +155,29 @@ def querysubmit():
 
 @views.route("/tables", methods=['GET','POST'])
 def tables():
+	# get list of all tables in the database
 	cur.execute('SELECT table_name FROM information_schema.tables WHERE table_schema = \'public\';')
 	conn.commit()
 	tablelist = cur.fetchall()
+
+	# get number of samples in each table
 	countlist = []
 	for t in tablelist: 
 		cur.execute(f'SELECT COUNT(unique_id) FROM {t[0]}')
 		conn.commit
 		count = cur.fetchone()
 		countlist.append(count)
+
 	return render_template("tables.html", tablelist=tablelist, countlist=countlist)
+
 
 @views.route('/delete-table/<table>', methods=['GET'])
 def delete_table(table):  
-	print(table)
 	cur.execute(f'DROP TABLE IF EXISTS {table};')
 	conn.commit()
+	flash(f'Deleted table \"{table}\"', category='success')
+
 	return redirect("/tables")
-
-
-
-
 
 
 # –––––– function to create harker diagrams –––––––
@@ -185,10 +189,8 @@ def harkerdiagrams(table):
 
     q1 = cur.fetchall()
 
-
     elements = ['mgo', 'sio2', 'feo_total', 'al2o3', 'cao', 'mno', 'p2o5']
     df = pd.DataFrame(q1, columns=elements)
-
 
     # Set up 2x3 plots
     fig, ((ax1, ax2, ax3), (ax4, ax5, ax6)) = plt.subplots(2, 3)
@@ -206,9 +208,7 @@ def harkerdiagrams(table):
 
     x = df['mgo']
     for s in range(6):
-        sub[s].plot(x, df[elements2[s]], symbolsDict['Delta'], markerfacecolor=coloursDict['Delta'],
-                                    markeredgecolor='black', markersize=4, label=table)
-
+        sub[s].plot(x, df[elements2[s]], symbolsDict['Delta'], markerfacecolor=coloursDict['Delta'], markeredgecolor='black', markersize=4, label=table)
         sub[s].set_xlabel('MgO (wt%)')
         sub[s].set_ylabel(labels[s])
         sub[s].legend(numpoints=1, fontsize=6)
