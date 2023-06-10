@@ -12,6 +12,7 @@ from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
 import matplotlib.pyplot as plt
+import tasplot 
 
 IMAGE_FOLDER = os.path.join('staticFiles', 'images')
 conn = psycopg2.connect(host="localhost", user="postgres", dbname="dis2023", password="wildeisfine",port="5432")
@@ -64,7 +65,27 @@ def harkerdiagrams(table):
     #plt.savefig(name, dpi=300, bbox_inches='tight', pad_inches=0.25)
 
 
-harkerdiagrams('test1')
+#harkerdiagrams('test1')
 #print(len('SELECT mgo, sio2, feo_total, al2o3, cao, mno, p2o5 FROM ;'))
 #sql = 'SELECT mgo, sio2, feo_total, al2o3, cao, mno, p2o5 FROM ;'
 #print(sql[:56]+'sample'+sql[56:])
+
+
+
+"""
+
+
+@views.route("/tables", methods=['GET','POST'])
+def tables():
+	cur.execute('SELECT table_name FROM information_schema.tables WHERE table_schema = \'public\';')
+	conn.commit()
+	tablelist = cur.fetchall()
+	countlist = []
+	for t in tablelist: 
+		cur.execute(f'SELECT COUNT(unique_id) FROM {t[0]}')
+		conn.commit
+		count = cur.fetchone()
+		countlist.append(count)
+	return render_template("tables.html", tablelist=tablelist, countlist=countlist)
+
+"""

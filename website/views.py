@@ -156,7 +156,13 @@ def tables():
 	cur.execute('SELECT table_name FROM information_schema.tables WHERE table_schema = \'public\';')
 	conn.commit()
 	tablelist = cur.fetchall()
-	return render_template("tables.html", tablelist=tablelist)
+	countlist = []
+	for t in tablelist: 
+		cur.execute(f'SELECT COUNT(unique_id) FROM {t[0]}')
+		conn.commit
+		count = cur.fetchone()
+		countlist.append(count)
+	return render_template("tables.html", tablelist=tablelist, countlist=countlist)
 
 @views.route('/delete-table/<table>', methods=['GET'])
 def delete_table(table):  
