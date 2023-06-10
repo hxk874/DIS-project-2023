@@ -1,13 +1,28 @@
 {% extends "base.html" %} {% block title %}Tables{% endblock %} {% block content %}
 
-
+<br />
 <h3 align="center">Tables</h3>
-
+<br />
+<table class="table">
+<thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Table</th>
+        <th scope="col">Number of samples</th>
+        <th scope="col">Click here to delete</th>
+    </tr>
+</thead>
+<tbody>
 {% for t in tablelist %}
-        {{t[0]}} {{countlist[tablelist.index(t)][0]}} <button type="button" class="close" onClick="">
-            <span aria-hidden="true"><a href="/delete-table/{{t[0]}}">&times;</a></span></button>
-          <br />
+<tr>
+    <th scope="row">{{tablelist.index(t)+1}}</th>
+    <td>{{t[0]}}</td> 
+        <td>{{countlist[tablelist.index(t)][0]}}</td> 
+            <td><button type="button" class="close" onClick="">
+            <span aria-hidden="true"><a href="/delete-table/{{t[0]}}">&times;</a></span></button></td>
+        </tr>
       {% endfor %}
+    </tbody></table>
 
 
 {% endblock %}
