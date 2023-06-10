@@ -112,7 +112,7 @@ def query():
 	if request.method == 'POST':
 		if request.form.get('submit_selected') == "submit_selected":
 			table = request.form.get('table')
-			flash(f'You chose table {table}', category='success')
+			flash(f'You chose the table \"{table}\"', category='success')
 			
 			chemElm = request.form.get('chemElm')
 			cur.execute(f'SELECT MAX({chemElm}) FROM {table} WHERE {chemElm} != \'NaN\' ;')
@@ -140,7 +140,7 @@ def query():
 
 			cur.execute(f'DELETE FROM {table} WHERE {param} {ope} {num};')
 			conn.commit()
-			flash(f'Deleted all samples where {param} {ope} {num}', category='success')
+			flash(f'Deleted all samples from \"{table}\" where {param} {ope} {num}', category='success')
 			return render_template("query.html", ope=ope, param=param, num=num, table=table, tablelist=tablelist)
 
 		return render_template("querysubmit.html", ope=ope, param=param, num=num, table=table, selectOutput=selectOutput, chemElm=chemElm, maxChemElm=maxChemElm, minChemElm=minChemElm, selectCol=selectCol, tablelist=tablelist, image=image)
