@@ -109,10 +109,7 @@ def query():
 	tablelist = cur.fetchall()
 	if request.method == 'GET':
 		return render_template("query.html", tablelist=tablelist)
-	
-
 	if request.method == 'POST':
-
 		if request.form.get('submit_selected') == "submit_selected":
 			table = request.form.get('table')
 			flash(f'You chose table {table}', category='success')
@@ -143,7 +140,7 @@ def query():
 
 			cur.execute(f'DELETE FROM {table} WHERE {param} {ope} {num};')
 			conn.commit()
-			flash(f'Deleted all rows where {param} {ope} {num}', category='success')
+			flash(f'Deleted all samples where {param} {ope} {num}', category='success')
 			return render_template("query.html", ope=ope, param=param, num=num, table=table, tablelist=tablelist)
 
 		return render_template("querysubmit.html", ope=ope, param=param, num=num, table=table, selectOutput=selectOutput, chemElm=chemElm, maxChemElm=maxChemElm, minChemElm=minChemElm, selectCol=selectCol, tablelist=tablelist, image=image)
