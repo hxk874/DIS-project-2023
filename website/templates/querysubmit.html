@@ -27,17 +27,6 @@
 </div>
 
 
-
-<div class="row mb-3">
-  <label for="table" class="col-sm-2 col-form-label"> <p class="font-weight-bold">Display of SiO2 vs. K2O + Na2O</p> </label>
-  <div class="border border-secondary p-2 mb-2" style="width: 900px;"> <div> 
-    <center><img src="{{url_for('static', filename='/images/'+image)}}"  width="800" class="centerImage"></center>
-  </div> </div>
-</div>
-
-
-
-
 <div class="row mb-3">
   <label for="table" class="col-sm-2 col-form-label"> <p class="font-weight-bold">Selected attribute: {{selectCol}}</p> </label>
   <div class="border border-secondary p-2 mb-2" style="width: 400px;"> {%for i in selectOutput%}
